@@ -57,13 +57,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                   |Backsp| Del  |------|       |------| Enter| Space|
  *                                   |      |      | PgDn |       | RAlt |      |      |
  *                                   `--------------------'       `--------------------'
+ *
  */
 [BASE] = KEYMAP(
 
 // left hand
  KC_ESC    ,KC_1   ,KC_2   ,KC_3   ,KC_4  ,KC_5  ,F(LSpec)
 ,F(LMdia)  ,KC_Q   ,KC_W   ,KC_E   ,KC_R  ,KC_T  ,KC_LBRC
-,KC_LCTL   ,KC_A   ,KC_S   ,KC_D   ,KC_F  ,KC_G
+,CTL_T(KC_ESC)   ,KC_A   ,KC_S   ,KC_D   ,KC_F  ,KC_G
 ,KC_LSPO   ,KC_Z   ,KC_X   ,KC_C   ,KC_V  ,KC_B  ,LSFT(KC_TAB)
 ,M(LSymb)  ,KC_MEH ,KC_HYPR,KC_LALT,KC_LGUI
                                          ,KC_HOME,KC_END
