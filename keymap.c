@@ -40,7 +40,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /******* Base Layer ****************************************************************************************************
  *
  * ,------------------------------------------------------.       ,------------------------------------------------------.
- * | Escape     |   1  |   2  |   3  |   4  |   5  | Sp`~ |       |   6  |   7  |   8  |   9  |   0  |   -  | =+ Special |
+ * | Escape     |   1  |   2  |   3  |   4  |   5  | `~Sp |       |  -   |   6  |   7  |   8  |   9  |   0  | =+ Special |
  * |------------+------+------+------+------+-------------|       |------+------+------+------+------+------+------------|
  * | Tab  Media |   Q  |   W  |   E  |   R  |   T  |   [  |       |  ]   |   Y  |   U  |   I  |   O  |   P  | \|   Media |
  * |------------+------+------+------+------+------|      |       |      |------+------+------+------+------+------------|
@@ -72,9 +72,9 @@ M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
                                              KC_BSPC, KC_DEL, KC_PGDN,
 
                                                                   // right hand
-        KC_6,          KC_7,    KC_8,     KC_9,     KC_0,    KC_MINS,  F(RSpec),
+        KC_MINS,       KC_6,    KC_7,     KC_8,     KC_9,    KC_0,     F(RSpec),
         KC_RBRC,       KC_Y,    KC_U,     KC_I,     KC_O,    KC_P,     F(RMdia),
-                    KC_H,    KC_J,     KC_K,     KC_L,    KC_SCLN,  F(RSymb),
+                       KC_H,    KC_J,     KC_K,     KC_L,    KC_SCLN,  F(RSymb),
         LSFT(KC_RBRC), KC_N,    KC_M,     KC_COMM,  KC_DOT,  KC_SLSH,  KC_RSPC,
                                 KC_LEFT,  KC_DOWN,   KC_UP,  KC_RIGHT, KC_RCTL,
         KC_RGUI,  KC_MEH,
