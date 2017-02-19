@@ -3,7 +3,19 @@
 
 qmk="${HOME}/git/qmk_firmware"
 c=`pwd`
-cd ${qmk} && git up
-cd ${c} && git up
+host=`hostname`
 
-make && cp ${qmk}/.build /media/sf_shared -R > /dev/null
+if [[ ${host} == "HISCORES" ]]; then
+    dest="${HOME}/winhome/Desktop/ergodox"
+elif [[ ${host} == "transcanadahighway" ]]; then
+    dest="/media/sf_shared"
+else
+    dest=${c}
+fi
+
+cd ${qmk} && git pull
+cd ${c} && git pull
+
+make && cp ${qmk}/.build ${dest} -R > /dev/null
+
+echo ${dest}
