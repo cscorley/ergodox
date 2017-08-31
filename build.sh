@@ -2,6 +2,7 @@
 
 
 qmk="${HOME}/git/qmk_firmware"
+qmk_ez="${HOME}/git/qmk_firmware/keyboards/ergodox_ez"
 c=`pwd`
 host=`hostname`
 
@@ -15,7 +16,6 @@ fi
 
 cd ${qmk} && git pull
 cd ${c} && git pull
-
-make && cp ${qmk}/.build ${dest} -R > /dev/null
+cd ${qmk_ez} && make cscorley && cp ${qmk}/.build ${dest} -R > /dev/null
 
 echo ${dest}
