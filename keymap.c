@@ -1,27 +1,46 @@
 #include QMK_KEYBOARD_H
-#include "debug.h"
 #include "action_layer.h"
-#include "version.h"
-#include "led.h"
 #include "action_util.h"
+#include "debug.h"
+#include "ergodox_ez.h"
+#include "led.h"
 #include "mousekey.h"
+#include "version.h"
 
-#define BASE   0 // default layer
-#define SYMB   1 // symbols layer
-#define MDIA   2 // media layer
-#define SPEC   3 // special layer
+#define _ KC_TRNS
+#define __ KC_TRNS
+#define ___ KC_TRNS
+#define ____ KC_TRNS
+#define _____ KC_TRNS
+#define ______ KC_TRNS
 
-#define LSymb 10 // left symbol-shift key
-#define LMdia 11 // left media-shift key
-#define LSpec 12 // left special-shift key
-#define RSymb 13 // right symbol-shift key
-#define RMdia 14 // right media-shift key
-#define RSpec 15 // right special-shift key
+// Layers
+enum {
+    BASE = 0,
+    SYMB,
+    MDIA,
+    SPEC
+};
 
-#define MUL   20 // mouse up left
-#define MUR   21 // mouse up right
-#define MDL   22 // mouse down left
-#define MDR   23 // mouse down right
+enum {
+    LSymb, // left symbol-shift key
+    LMdia, // left media-shift key
+    LSpec, // left special-shift key
+    RSymb, // right symbol-shift key
+    RMdia, // right media-shift key
+    RSpec, // right special-shift key
+
+    MUL,   // mouse up left
+    MUR,   // mouse up right
+    MDL,   // mouse down left
+    MDR   // mouse down right
+};
+
+enum {
+    TD_SPECIAL,
+    TD_MEDIA,
+    TD_SYMBOL
+};
 
 /*
  * The Ordinary Layout for the Ergodox EZ keyboard, v4.20
@@ -64,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // left hand
 KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5, F(LSpec),
-F(LMdia), KC_Q,   KC_W,    KC_E,    KC_R,    KC_T, KC_LBRC,
+M(LMdia),   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T, KC_LBRC,
 KC_LCTL,  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,
 KC_LSPO,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, LSFT(KC_LBRC),
 M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
@@ -109,19 +128,19 @@ M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
 [SYMB] = KEYMAP(
 
 // left hand
- KC_TRNS ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_TRNS
-,KC_TRNS ,KC_EXLM ,KC_AT   ,KC_LCBR ,KC_RCBR ,KC_AMPR ,LSFT(KC_COMM)
-,KC_TRNS ,KC_HASH ,KC_DLR  ,KC_LPRN ,KC_RPRN ,KC_GRV
-,KC_TRNS ,KC_PERC ,KC_CIRC ,KC_LBRC ,KC_RBRC ,KC_TILD ,KC_TAB
-,KC_TRNS ,KC_MEH  ,KC_HYPR ,KC_LALT ,KC_LGUI
+ _____ ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,_____
+,_____ ,KC_EXLM ,KC_AT   ,KC_LCBR ,KC_RCBR ,KC_AMPR ,LSFT(KC_COMM)
+,_____ ,KC_HASH ,KC_DLR  ,KC_LPRN ,KC_RPRN ,KC_GRV
+,_____ ,KC_PERC ,KC_CIRC ,KC_LBRC ,KC_RBRC ,KC_TILD ,KC_TAB
+,_____ ,KC_MEH  ,KC_HYPR ,KC_LALT ,KC_LGUI
                                              ,KC_LEFT ,KC_RGHT
                                                       ,KC_UP
                                     ,KC_SPC  ,KC_ENT  ,KC_DOWN
                                                                  // right hand
-                                                                 ,KC_F6   ,KC_F7 ,KC_F8  ,KC_F9 ,KC_F10  ,KC_MINS     ,KC_TRNS
-                                                                 ,LSFT(KC_DOT),KC_PIPE ,KC_7  ,KC_8   ,KC_9  ,KC_SLSH ,KC_TRNS
-                                                                              ,KC_SLSH ,KC_4  ,KC_5   ,KC_6  ,KC_ASTR ,KC_TRNS
-                                                                 ,LSFT(KC_TAB),KC_BSLS ,KC_1  ,KC_2   ,KC_3  ,KC_MINS ,KC_TRNS
+                                                                 ,KC_F6   ,KC_F7 ,KC_F8  ,KC_F9 ,KC_F10  ,KC_MINS     ,_____
+                                                                 ,LSFT(KC_DOT),KC_PIPE ,KC_7  ,KC_8   ,KC_9  ,KC_SLSH ,_____
+                                                                              ,KC_SLSH ,KC_4  ,KC_5   ,KC_6  ,KC_ASTR ,_____
+                                                                 ,LSFT(KC_TAB),KC_BSLS ,KC_1  ,KC_2   ,KC_3  ,KC_MINS ,_____
                                                                                        ,KC_0  ,KC_DOT ,KC_EQL,KC_PLUS ,KC_ENT
                                                                  ,KC_HOME     ,KC_END
                                                                  ,KC_PGUP
@@ -153,19 +172,19 @@ M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
 [MDIA] = KEYMAP(
 
 // left hand
- KC_TRNS ,KC_F11   ,KC_F12  ,KC_F13   ,KC_F14  ,KC_F15  ,KC_TRNS
-,KC_TRNS ,KC_POWER ,M(MUL)  ,KC_MS_U  ,M(MUR)  ,KC_VOLU ,KC_WH_U
-,KC_TRNS ,KC_SLEP  ,KC_MS_L ,KC_MS_D  ,KC_MS_R ,KC_VOLD
-,KC_TRNS ,KC_NO    ,M(MDL)  ,KC_MS_D  ,M(MDR)  ,KC_MUTE ,KC_WH_D
+ _____ ,KC_F11   ,KC_F12  ,KC_F13   ,KC_F14  ,KC_F15  ,_____
+,_____ ,KC_POWER ,M(MUL)  ,KC_MS_U  ,M(MUR)  ,KC_VOLU ,KC_WH_U
+,_____ ,KC_SLEP  ,KC_MS_L ,KC_MS_D  ,KC_MS_R ,KC_VOLD
+,_____ ,KC_NO    ,M(MDL)  ,KC_MS_D  ,M(MDR)  ,KC_MUTE ,KC_WH_D
 ,KC_LCTL ,KC_MEH   ,KC_BTN3 ,KC_BTN1  ,KC_BTN2
                                                ,KC_WSTP ,KC_WREF
                                                         ,KC_WSCH
                                       ,KC_WBAK ,KC_NO   ,KC_WHOM
                                                                      // right hand
-                                                                     ,KC_F16  ,KC_F17       ,KC_F18       ,KC_F19  ,KC_F20  ,KC_NO    ,KC_TRNS
-                                                                     ,KC_WH_U  ,KC_PSCR ,KC_HOME      ,KC_UP        ,KC_PGUP ,KC_MAIL ,KC_TRNS
-                                                                               ,KC_NLCK ,KC_LEFT      ,KC_DOWN      ,KC_RIGHT,KC_MYCM ,KC_TRNS
-                                                                     ,KC_WH_D  ,KC_NO   ,KC_END       ,KC_DOWN      ,KC_PGDN ,KC_NO   ,KC_TRNS
+                                                                     ,KC_F16  ,KC_F17       ,KC_F18       ,KC_F19  ,KC_F20  ,KC_NO    ,_____
+                                                                     ,KC_WH_U  ,KC_PSCR ,KC_HOME      ,KC_UP        ,KC_PGUP ,KC_MAIL ,_____
+                                                                               ,KC_NLCK ,KC_LEFT      ,KC_DOWN      ,KC_RIGHT,KC_MYCM ,_____
+                                                                     ,KC_WH_D  ,KC_NO   ,KC_END       ,KC_DOWN      ,KC_PGDN ,KC_NO   ,_____
                                                                                         ,GUI_T(KC_INS),ALT_T(KC_DEL),KC_HYPR ,KC_MEH  ,KC_RCTL
                                                                      ,KC_MPRV  ,KC_MNXT
                                                                      ,KC_VOLU
@@ -178,11 +197,11 @@ M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
  * ,-------------------------------------------------------.    ,-------------------------------------------------------.
  * |             |  Esc |      |      |      |      |      |    |      |      |      |      |   -  | RESET|             |
  * |-------------+------+------+------+------+-------------|    |------+------+------+------+------+------+-------------|
- * | Media Lock  |      |      |      |      |      |      |    |      |      |      |      |  [   |   ]  | Media Lock  |
+ * |             |      |      |      |      |      |      |    |      |      |      |      |  [   |   ]  |             |
  * |-------------+------+------+------+------+------|      |    |      |------+------+------+------+------+-------------|
- * | Symbol Lock |      |      |      |      |      |------|    |------|      |      |      |      |      | Symbol Lock |
+ * |             |      |      |      |      |      |------|    |------|      |      |      |      |      |             |
  * |-------------+------+------+------+------+------|      |    |      |------+------+------+------+------+-------------|
- * | Caps Lock   |      |      |      |      |      |      |    |      |      |      |      |      |      | Caps Lock   |
+ * | Caps Lock   |      |      |      |      |      |      |    |      |      |      |      |      |      |             |
  * `-------------+------+------+------+------+-------------'    `-------------+------+------+------+------+-------------'
  *      |        |      |      |      |      |                                |      |      |      |      |        |
  *      `------------------------------------'                                `------------------------------------'
@@ -196,23 +215,23 @@ M(LSymb), KC_MEH, KC_HYPR, KC_LALT, KC_LGUI,
  */
 [SPEC] = KEYMAP(
 // left hand
- KC_TRNS ,KC_ESC  ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,F(LMdia) ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,M(LSymb) ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,KC_CAPS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-,M(LSymb) ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                             ,KC_TRNS ,KC_TRNS
-                                                      ,KC_TRNS
-                                     ,KC_TRNS,KC_TRNS ,KC_TRNS
+ _____ ,KC_ESC  ,_____ ,_____ ,_____ ,_____ ,_____
+,_____ ,_____ ,_____ ,_____ ,_____ ,_____ ,_____
+,_____ ,_____ ,_____ ,_____ ,_____ ,_____
+,KC_CAPS ,_____ ,_____ ,_____ ,_____ ,_____ ,_____
+,_____ ,_____ ,_____ ,_____ ,_____
+                                             ,_____ ,_____
+                                                      ,_____
+                                     ,_____,_____ ,_____
                                                              // right hand
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_MINS ,RESET,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_LBRC ,KC_RBRC ,KC_TRNS
-                                                                      ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_CAPS
-                                                                               ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS
-                                                             ,KC_TRNS
-                                                             ,KC_TRNS ,KC_TRNS ,KC_TRNS
+                                                             ,_____ ,_____ ,_____ ,_____ ,KC_MINS ,RESET,_____
+                                                             ,_____ ,_____ ,_____ ,_____ ,KC_LBRC ,KC_RBRC ,_____
+                                                                      ,_____ ,_____ ,_____ ,_____ ,_____ ,_____
+                                                             ,_____ ,_____ ,_____ ,_____ ,_____ ,_____ ,KC_CAPS
+                                                                               ,_____ ,_____ ,_____ ,_____ ,_____
+                                                             ,_____ ,_____
+                                                             ,_____
+                                                             ,_____ ,_____ ,_____
     )
 };
 
@@ -225,6 +244,34 @@ const uint16_t PROGMEM fn_actions[] = {
     ,[RMdia] = ACTION_MACRO_TAP(RMdia)
     ,[RSpec] = ACTION_MACRO_TAP(RSpec)
 };
+
+/*
+void dance_special(qk_tap_dance_state_t *state, void *user_data)
+{
+  if (state->count > 1)
+  {
+    register_code(KC_LCTL);
+    register_code(KC_X);
+    unregister_code(KC_X);
+    unregister_code(KC_LCTL);
+  }
+  else
+  {
+    register_code(KC_LCTL);
+    register_code(KC_C);
+    unregister_code(KC_C);
+    unregister_code(KC_LCTL);
+  }
+
+  reset_tap_dance(state);
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_SPECIAL] = ACTION_TAP_DANCE_FN(),
+    [TD_MEDIA] = ACTION_TAP_DANCE_FN(unredo),
+    [TD_SYMBOL] = ACTION_TAP_DANCE_FN(findreplace)
+};
+*/
 
 uint16_t symb_shift = 0;
 uint16_t mdia_shift = 0;
@@ -520,3 +567,5 @@ void matrix_scan_user(void)
         ergodox_right_led_3_off();
     }
 };
+
+
